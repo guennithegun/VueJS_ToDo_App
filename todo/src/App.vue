@@ -2,27 +2,54 @@
   <div class="centerApp">
     <div class="todoWrapper">
       <div>
-        <h1>Road to Succes</h1>
+        <h1>My Road to Succes</h1>
       </div>
       <div>
         <md-field>
-          <label>Type here!</label>
-          <md-input class="todoInput" v-model="currentTodo" @keydown.enter="addTodo()"></md-input>
+          <label>Add ToDo</label>
+          <md-input v-model="currentTodo" @keydown.enter="addTodo()"></md-input>
           <span class="md-helper-text">Press Enter to add ToDo</span>
         </md-field>
+      </div>
+      <hr>
+      <div>
+        <h2>Steps to Take</h2>
+      </div>
+      <div>
         <ul class="todos">
+          <div class="emptyTodos" v-if="todos.length === 0">
+            <h3>The Journey never ends...</h3>
+            <p>Add some tasks to ascend the stairs!</p>
+          </div>
           <li v-for="todo in todos" :key="todo.id">
-            <span v-if="todo.completed === false">
-              <input type="checkbox" v-model="todo.completed">
-            </span>
-            {{ todo.label }}
-            <span v-if="todo.completed">DONE</span>
-            <button @click="removeTodo(todo)" class="deleteButton"><md-icon>backspace</md-icon></button>
-            <span v-model="todo.editedTodoId" @click="editTodo(todo)"><md-icon>create</md-icon></span>
-            <span v-if="todo.editedTodoId">
-              <input v-model="todo.editedTodo" placeholder="Edit Todo">
-              <button @click="updateTodo(todo)">Edit</button>
-            </span>
+            <div>
+              <table>
+                <tr>
+                  <td>
+                    <span class="checkCircle" v-if="todo.completed" @click="undoneTodo(todo)"><md-icon>check_circle</md-icon><md-tooltip md-direction="bottom">Uncheck ToDo</md-tooltip></span>
+                    <span v-if="todo.completed === false">
+                      <input class="checkBox" type="checkbox" v-model="todo.completed">
+                      <md-tooltip md-direction="bottom">Check ToDo</md-tooltip>
+                    </span>
+                  </td>
+                  <td>
+                    {{ todo.label }}
+                  </td>
+              </tr>
+              </table>
+            </div>
+            <div class="editToDos">
+              <span @click="removeTodo(todo)" class="deleteButton"><md-icon>backspace</md-icon><md-tooltip md-direction="bottom">Delete ToDo</md-tooltip></span>
+              <span class="editButton" v-model="todo.editedTodoId" @click="editTodo(todo)"><md-icon>create</md-icon><md-tooltip md-direction="bottom">Edit ToDo</md-tooltip></span>
+            </div>
+            <div v-if="todo.editedTodoId">
+              <md-field>
+                <label>Edit ToDo</label>
+                <md-input v-model="todo.editedTodo"></md-input>
+              </md-field>
+              <span class="editDone" @click="updateTodo(todo)"><md-icon>done</md-icon><md-tooltip md-direction="bottom">Apply</md-tooltip></span>
+              <span class="abortEdit" v-model="todo.editedTodoId" @click="hideEdit(todo)"><md-icon>clear</md-icon><md-tooltip md-direction="bottom">Cancel</md-tooltip></span>
+            </div>
           </li>
         </ul>
       </div>
@@ -53,9 +80,15 @@
       editTodo(todo) {
         todo.editedTodoId = true;
       },
+      hideEdit(todo) {
+        todo.editedTodoId = false;
+      },
       updateTodo(todo) {
         todo.label = todo.editedTodo;
         todo.editedTodoId = false;
+      },
+      undoneTodo(todo) {
+        todo.completed = false;
       }
     }
   };
@@ -66,6 +99,7 @@
     width: 100%;
     height: 100%;
     font-family: 'Roboto', sans-serif;
+    padding: 5px;
   }
   html {
     background: url("./assets/stairway.jpg") no-repeat center center fixed;
@@ -75,13 +109,35 @@
     background-size: cover;
   }
 
-  li {
-    list-style-type: none;
-    font-size: 18px;
+  ul {
+    margin: 30px 0;
+    padding: 0;
   }
 
-  h1 {
+  li {
+    padding: 3px;
+    margin: 5px 0;
+    list-style-type: none;
+    font-size: 18px;
+    background-color: rgba(0,0,0, 0.5);
+    border-radius: 3px;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.29);
+  }
+
+  h1, h2 {
     text-align: center;
+  }
+
+  h2 {
+    position: relative;
+    top: 15px;
+  }
+
+  hr {
+    position: relative;
+    top: 15px;
+    margin-bottom: 15px;
+    border: .5px solid white;
   }
 
   .todoWrapper {
@@ -116,9 +172,48 @@
   }
 
   .deleteButton {
-    background-color: transparent;
-    border: none;
     cursor: pointer;
+    color: #FC440F;
+    margin: 0 5px;
+  }
+
+  .editButton {
+    cursor: pointer;
+    color: #FDE74C;
+    margin: 0 5px;
+  }
+
+  .checkCircle {
+    color: #85CB33;
+  }
+
+  .editToDos {
+    margin: 5px 0;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .editDone {
+    color: #85CB33;
+    cursor: pointer;
+  }
+
+  .abortEdit {
+    color: #FC440F;
+    cursor: pointer;
+  }
+
+  .md-tooltip {
     color: white;
+    background-color: rgba(0,0,0, 0.8);
+  }
+
+  .emptyTodos {
+    text-align: center;
+    background-color: rgba(0,0,0, 0.5);
+    border-radius: 3px;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.29);
+    padding: 20px;
   }
 </style>

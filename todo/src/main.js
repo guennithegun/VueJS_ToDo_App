@@ -1,9 +1,9 @@
 import Vue from 'vue';
 import App from './App.vue';
-import { MdField, MdIcon } from 'vue-material/dist/components';
+import VueMaterial from 'vue-material';
 import 'vue-material/dist/vue-material.min.css';
 
-Vue.use(MdField, MdIcon);
+Vue.use(VueMaterial);
 
 Vue.config.productionTip = false
 
