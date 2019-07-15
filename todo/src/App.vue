@@ -143,12 +143,13 @@
   .todoWrapper {
     width: 100%;
     max-width: 400px;
-    min-height: 500px;
+    height: 500px;
     background-color: rgba(65, 66, 136, 0.7);
     padding: 15px;
     border-radius: 4px;
     color: white;
     box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.29);
+    overflow: scroll;
   }
 
   .centerApp {
